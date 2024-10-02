@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager/ui/screen/forgot_password_email_screen.dart';
+import 'package:task_manager/ui/screen/main_bottom_nab_bar_screen.dart';
 import 'package:task_manager/ui/screen/sign_up_screen.dart';
 import 'package:task_manager/ui/utils/app_colors.dart';
 import 'package:task_manager/ui/widgets/screen_background.dart';
@@ -116,12 +117,15 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   void _onTapNextButton() {
-    //Todo : On Tap next Button
-
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const MainBottomNabBarScreen(),
+        ),
+        (value) => false);
   }
 
   void _onTapSignUp() {
-    //Todo : On Tap next Button
     Navigator.push(
       context,
       MaterialPageRoute(
