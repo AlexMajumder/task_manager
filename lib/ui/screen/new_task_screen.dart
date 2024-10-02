@@ -1,12 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/ui/screen/add_new_task_screen.dart';
+import '../widgets/task_summery_card.dart';
 
-class NewTaskScreen extends StatelessWidget {
+class NewTaskScreen extends StatefulWidget {
   const NewTaskScreen({super.key});
 
   @override
+  State<NewTaskScreen> createState() => _NewTaskScreenState();
+}
+
+class _NewTaskScreenState extends State<NewTaskScreen> {
+  @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('New Task'),
+    return Scaffold(
+      body: Column(
+        children: [
+          buildSummerySection(),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _onTapAddFAB,
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  Widget buildSummerySection() {
+    return const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                TaskSummeryCard(
+                  count: 9,
+                  title: 'New',
+                ),TaskSummeryCard(
+                  count: 10,
+                  title: 'Completed',
+                ),TaskSummeryCard(
+                  count: 8,
+                  title: 'Cancelled',
+                ),TaskSummeryCard(
+                  count: 6,
+                  title: 'Progress',
+                ),
+              ],
+            ),
+          ),
+        );
+  }
+
+  void _onTapAddFAB() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const AddNewTaskScreen(),
+      ),
     );
   }
 }
