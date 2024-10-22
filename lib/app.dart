@@ -50,7 +50,7 @@ class _TaskManagerAppState extends State<TaskManagerApp> {
           backgroundColor: AppColors.themeColor,
           foregroundColor: Colors.white,
           padding:
-          EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           fixedSize: const Size.fromWidth(double.maxFinite),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8))),
