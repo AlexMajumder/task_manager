@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager/ui/screen/add_new_task_screen.dart';
+import '../widgets/task_card.dart';
 import '../widgets/task_summery_card.dart';
 
 class NewTaskScreen extends StatefulWidget {
@@ -20,27 +21,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             child: ListView.separated(
               itemCount: 10,
               itemBuilder: (context, index) {
-                return Card(
-                  elevation: 0,
-                  color: Colors.white,
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Title of the task',
-                            style: Theme.of(context).textTheme.titleSmall),
-                        const Text(
-                          'Description of task',
-                        ),
-                        const Text(
-                          'Date: 12/12/2024',
-                        ),
-                      ],
-                    ),
-                  ),
-                );
+                return const TaskCard();
               },
               separatorBuilder: (context, index) {
                 return const SizedBox(height: 8);
@@ -94,3 +75,5 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     );
   }
 }
+
+
