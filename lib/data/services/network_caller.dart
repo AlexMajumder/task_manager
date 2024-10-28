@@ -39,7 +39,7 @@ class NetworkCaller {
       debugPrint(url); //to see in Console
       final Response response = await post(uri,
           headers: {
-        'ContentType' : 'application/json'
+        'Content-Type' : 'application/json'
           },
           body: jsonEncode(
             body,
@@ -47,6 +47,15 @@ class NetworkCaller {
       printResponse(url, response); //to see in Console
       if (response.statusCode == 200) {
         final decodeData = jsonDecode(response.body);
+
+        if(decodeData['status'] == 'fail'){
+          return NetworkResponse(
+              isSuccess: false,
+              statusCode: response.statusCode,
+              errorMessage: decodeData["data"],
+          );
+        }
+
         return NetworkResponse(
           isSuccess: true,
           statusCode: response.statusCode,
