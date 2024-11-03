@@ -1,3 +1,4 @@
+
 plugins {
     id "com.android.application"
     id "kotlin-android"
@@ -25,8 +26,8 @@ if (flutterVersionName == null) {
 
 android {
     namespace = "alexmajumderdeveloper.example.task_manager"
+    ndkVersion = "25.1.8937393"//
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8

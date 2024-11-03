@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:task_manager/data/models/network_response.dart';
 import 'package:task_manager/data/services/network_caller.dart';
 import 'package:task_manager/data/utils/urls.dart';
+import 'package:task_manager/ui/controller/auth_controller.dart';
 import 'package:task_manager/ui/screen/forgot_password_email_screen.dart';
 import 'package:task_manager/ui/screen/main_bottom_nab_bar_screen.dart';
 import 'package:task_manager/ui/screen/sign_up_screen.dart';
@@ -175,6 +176,9 @@ class _SignInScreenState extends State<SignInScreen> {
     _inProgress = false;
     setState(() {});
     if (response.isSuccess) {
+
+      await AuthController.saveAccessToken(response.responseData["token"]);
+
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
