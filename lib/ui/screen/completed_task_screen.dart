@@ -16,7 +16,6 @@ class CompletedTaskScreen extends StatefulWidget {
 }
 
 class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
-
   bool _getCompletedTaskListInProgress = false;
   List<TaskModel> _completedTaskList = [];
 
@@ -32,13 +31,16 @@ class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
       visible: !_getCompletedTaskListInProgress,
       replacement: const CenterCircularProgressIndicator(),
       child: RefreshIndicator(
-        onRefresh: () async{
+        onRefresh: () async {
           _getCompletedTaskList();
         },
         child: ListView.separated(
           itemCount: _completedTaskList.length,
           itemBuilder: (context, index) {
-            return  TaskCard(taskModel: _completedTaskList[index],);
+            return TaskCard(
+              taskModel: _completedTaskList[index],
+              onRefreshList: _getCompletedTaskList,
+            );
           },
           separatorBuilder: (context, index) {
             return const SizedBox(height: 8);
@@ -48,22 +50,25 @@ class _CompletedTaskScreenState extends State<CompletedTaskScreen> {
     );
   }
 
-
   Future<void> _getCompletedTaskList() async {
-    _completedTaskList.clear();// for avoid Append the list
+    _completedTaskList.clear(); // for avoid Append the list
     _getCompletedTaskListInProgress = true;
     setState(() {});
     final NetworkResponse response = await NetworkCaller.getRequest(
       url: Urls.completedTaskList,
     );
     if (response.isSuccess) {
-      final TaskListModel taskListModel = TaskListModel.fromJson(response.responseData);
+      final TaskListModel taskListModel =
+          TaskListModel.fromJson(response.responseData);
       _completedTaskList = taskListModel.taskList ?? [];
     } else {
-      showSnackBarMessage(context, response.errorMessage,true,);
+      showSnackBarMessage(
+        context,
+        response.errorMessage,
+        true,
+      );
     }
     _getCompletedTaskListInProgress = false;
     setState(() {});
   }
-
 }

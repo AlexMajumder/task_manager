@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:task_manager/data/models/network_response.dart';
 import 'package:task_manager/data/models/task_list_model.dart';
 import 'package:task_manager/data/models/task_model.dart';
+import 'package:task_manager/data/models/task_status_count_model.dart';
+import 'package:task_manager/data/models/task_status_model.dart';
 import 'package:task_manager/data/services/network_caller.dart';
 import 'package:task_manager/data/utils/urls.dart';
 import 'package:task_manager/ui/screen/add_new_task_screen.dart';
@@ -18,14 +20,18 @@ class NewTaskScreen extends StatefulWidget {
 }
 
 class _NewTaskScreenState extends State<NewTaskScreen> {
+
   bool _getNewTaskListInProgress = false;
+  bool _getTaskStatusCountListInProgress = false;
   List<TaskModel> _newTaskList = [];
+  List<TaskStatusModel> _taskStatusCountList = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _getNewTaskList();
+    _getTaskStatusCount();
   }
 
   @override
@@ -34,6 +40,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       body: RefreshIndicator(
         onRefresh: () async{
           _getNewTaskList();
+          _getTaskStatusCount();
         },
         child: Column(
           children: [
@@ -45,7 +52,9 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                 child: ListView.separated(
                   itemCount: _newTaskList.length,
                   itemBuilder: (context, index) {
-                    return TaskCard(taskModel: _newTaskList[index],);
+                    return TaskCard(taskModel: _newTaskList[index],
+                      onRefreshList: _getNewTaskList,
+                    );
                   },
                   separatorBuilder: (context, index) {
                     return const SizedBox(height: 8);
@@ -64,32 +73,27 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   }
 
   Widget buildSummerySection() {
-    return const Padding(
-      padding: EdgeInsets.all(8.0),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            TaskSummeryCard(
-              count: 9,
-              title: 'New',
-            ),
-            TaskSummeryCard(
-              count: 10,
-              title: 'Completed',
-            ),
-            TaskSummeryCard(
-              count: 8,
-              title: 'Cancelled',
-            ),
-            TaskSummeryCard(
-              count: 6,
-              title: 'Progress',
-            ),
-          ],
+    return  Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Visibility(
+        visible: _getTaskStatusCountListInProgress == false,
+        replacement: const CenterCircularProgressIndicator(),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: _getTaskSummeryCardList(),
+          ),
         ),
       ),
     );
+  }
+
+  List<TaskSummeryCard> _getTaskSummeryCardList(){
+    List<TaskSummeryCard> taskSummeryCardList =[];
+    for(TaskStatusModel t in _taskStatusCountList){
+      taskSummeryCardList.add(TaskSummeryCard(title: t.sId!, count: t.sum ?? 0));
+    }
+    return taskSummeryCardList;
   }
 
   void _onTapAddFAB() async{
@@ -118,6 +122,23 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       showSnackBarMessage(context, response.errorMessage,true,);
     }
     _getNewTaskListInProgress = false;
+    setState(() {});
+  }
+
+  Future<void> _getTaskStatusCount() async {
+    _taskStatusCountList.clear();// for avoid Append the list
+    _getTaskStatusCountListInProgress = true;
+    setState(() {});
+    final NetworkResponse response = await NetworkCaller.getRequest(
+      url: Urls.taskStatusCount,
+    );
+    if (response.isSuccess) {
+      final TaskStatusCountModel taskStatusCountModel = TaskStatusCountModel.fromJson(response.responseData);
+      _taskStatusCountList = taskStatusCountModel.taskStatusCountList ?? [];
+    } else {
+      showSnackBarMessage(context, response.errorMessage,true,);
+    }
+    _getTaskStatusCountListInProgress = false;
     setState(() {});
   }
 
