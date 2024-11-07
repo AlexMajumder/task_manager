@@ -104,10 +104,9 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
           const SizedBox(height: 8),
           TextFormField(
-            obscureText: true,
+            obscureText: true, // To Hide the password text
             controller: _passwordTEController,
-            autovalidateMode:
-                AutovalidateMode.onUserInteraction, // To Hide the password text
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             decoration: const InputDecoration(
               hintText: 'Password',
             ),
@@ -177,7 +176,6 @@ class _SignInScreenState extends State<SignInScreen> {
     _inProgress = false;
     setState(() {});
     if (response.isSuccess) {
-      
       LoginModel loginModel = LoginModel.fromJson(response.responseData);
 
       await AuthController.saveAccessToken(loginModel.token!);

@@ -25,11 +25,11 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult: (didPop,result){
-        if(didPop){
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
           return;
         }
-        Navigator.pop(context,_shouldRefreshPreviousPage);
+        Navigator.pop(context, _shouldRefreshPreviousPage);
       },
       child: Scaffold(
         appBar: const TMAppBar(),
@@ -113,22 +113,21 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
       "status": "New"
     };
 
-    final NetworkResponse response =
-        await NetworkCaller.postRequest(url: Urls.addNewTask,body: requestBody);
+    final NetworkResponse response = await NetworkCaller.postRequest(
+        url: Urls.addNewTask, body: requestBody);
     _addNewTaskInProgress = false;
     setState(() {});
 
-    if(response.isSuccess){
+    if (response.isSuccess) {
       _shouldRefreshPreviousPage = true;
       _clearTextField();
       showSnackBarMessage(context, 'New Task Added');
-
-    }else{
-      showSnackBarMessage(context, response.errorMessage,true);
+    } else {
+      showSnackBarMessage(context, response.errorMessage, true);
     }
   }
 
-  void _clearTextField(){
+  void _clearTextField() {
     _titleTEController.clear();
     _descriptionTEController.clear();
   }
